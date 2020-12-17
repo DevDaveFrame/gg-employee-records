@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 
 function EmployeeForm(props) {
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [salary, setSalary] = useState(0)
-  const [hireDate, setHireDate] = useState("")
-  const [position, setPosition] = useState("")
-  const [manager, setManager] = useState("")
+  const currentEmployee = props.currentEmployee
+  const [firstName, setFirstName] = useState(currentEmployee ? currentEmployee.firstName : "")
+  const [lastName, setLastName] = useState(currentEmployee ? currentEmployee.lastName : "")
+  const [salary, setSalary] = useState(currentEmployee ? currentEmployee.salary : 0)
+  const [hireDate, setHireDate] = useState(currentEmployee ? currentEmployee.hireDate : "")
+  const [position, setPosition] = useState(currentEmployee ? currentEmployee.position : "")
+  const [manager, setManager] = useState(currentEmployee ? currentEmployee.manager : "")
 
   return (
-    <form id="employee-form" onSubmit={(e) => props.sendForm(e)}>
+    <form id="employee-form" onSubmit={(e) => props.sendForm(e, currentEmployee)}>
       <label htmlFor="first-name">First Name:</label>
       <input
         onChange={(e)=>setFirstName(e.target.value)}
@@ -45,7 +46,6 @@ function EmployeeForm(props) {
         required
       />
       <label htmlFor="description">Hire Date:</label>
-      <br />
       <input 
         onChange={(e)=>setHireDate(e.target.value)}
         value={hireDate}
@@ -67,7 +67,6 @@ function EmployeeForm(props) {
         aria-invalid="true"
         required
       />
-      <br />
       <label htmlFor="first-name">Manager:</label>
       <input
         onChange={(e)=>setManager(e.target.value)}

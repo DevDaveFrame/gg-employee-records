@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import logo from './logo.svg';
 import './App.css';
 import EmployeeForm from "./components/EmployeeForm"
@@ -6,6 +6,8 @@ import EmployeeForm from "./components/EmployeeForm"
 
 
 function App() {
+  const [currentEmployee, setCurrentEmployee] = useState(undefined)
+
   useEffect(() => {
     fetch("/employees")
     .then(res => res.json())
@@ -13,7 +15,7 @@ function App() {
   })
 
   const URL = "/employees";
-  const sendForm = (e) => {
+  const sendForm = (e, currentEmployee) => {
     e.preventDefault();
     let form = e.target;
     let formBody = {
@@ -25,37 +27,25 @@ function App() {
       manager: form.manager.value
     }
     const configObject = {
-      method: "POST",
+      method: currentEmployee.id ? "PATCH" : "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       body: JSON.stringify(formBody),
     };
-
-    fetch(URL, configObject)
+    const endpoint = currentEmployee.id ? `${URL}/${currentEmployee.id}` : URL
+    fetch(endpoint, configObject)
       .then((response) => response.json())
       .then((employee) => console.log(employee))
       .catch((err) => console.log(err));
+    setCurrentEmployee(undefined)
   };
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <EmployeeForm sendForm={sendForm}/> 
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <EmployeeForm sendForm={sendForm} currentEmployee={currentEmployee}/> 
     </div>
   );
 }
