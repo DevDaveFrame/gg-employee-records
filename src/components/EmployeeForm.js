@@ -1,66 +1,41 @@
 import React, { useState } from "react";
 
-function EmployeeForm() {
+function EmployeeForm(props) {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [salary, setSalary] = useState(0)
-  const [hireDate, setHireDate] = useState(Date.now())
+  const [hireDate, setHireDate] = useState("")
   const [position, setPosition] = useState("")
   const [manager, setManager] = useState("")
 
-  const URL = "/employees";
-  const sendForm = (e) => {
-    e.preventDefault();
-    const formBody = {
-      firstName,
-      lastName,
-      salary,
-      hireDate,
-      position,
-      manager
-    };
-    const configObject = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(formBody),
-    };
-
-    fetch(URL, configObject)
-      .then((response) => response.json)
-      .then((employee) => console.log(employee))
-      .catch((err) => console.log(err));
-  };
   return (
-    <form id="employee-form" onSubmit={(e) => sendForm(e)}>
-      <label for="first-name">First Name:</label>
+    <form id="employee-form" onSubmit={(e) => props.sendForm(e)}>
+      <label htmlFor="first-name">First Name:</label>
       <input
-        onChange={()=>setFirstName()}
+        onChange={(e)=>setFirstName(e.target.value)}
         value={firstName}
         id="first-name"
-        name="first-name"
+        name="firstName"
         type="text"
         aria-autocomplete="list"
         aria-invalid="true"
         required
       />
-      <label for="author">Last Name:</label>
+      <label htmlFor="author">Last Name:</label>
       <input
-        onChange={()=>setLastName()}
+        onChange={(e)=>setLastName(e.target.value)}
         value={lastName}
         id="last-name"
-        name="last-name"
+        name="lastName"
         type="text"
         aria-autocomplete="list"
         aria-invalid="true"
         required
       />
       <br />
-      <label for="price">Salary:</label>
+      <label htmlFor="price">Salary:</label>
       <input
-        onChange={()=>setSalary()}
+        onChange={(e)=>setSalary(e.target.value)}
         value={salary}
         type="number"
         name="salary"
@@ -69,21 +44,21 @@ function EmployeeForm() {
         aria-invalid="true"
         required
       />
-      <label for="description">Hire Date:</label>
+      <label htmlFor="description">Hire Date:</label>
       <br />
       <input 
-        onChange={()=>setHireDate()}
+        onChange={(e)=>setHireDate(e.target.value)}
         value={hireDate}
         id="hire-date"
-        name="hire-date"
+        name="hireDate"
         type="date" 
         aria-invalid="true" 
         required
         />
       <br />
-      <label for="first-name">Position:</label>
+      <label htmlFor="first-name">Position:</label>
       <input
-        onChange={()=>setPosition()}
+        onChange={(e)=>setPosition(e.target.value)}
         value={position}
         id="position"
         name="position"
@@ -93,9 +68,9 @@ function EmployeeForm() {
         required
       />
       <br />
-      <label for="first-name">Manager:</label>
+      <label htmlFor="first-name">Manager:</label>
       <input
-        onChange={()=>setManager()}
+        onChange={(e)=>setManager(e.target.value)}
         value={manager}
         id="manager"
         name="manager"

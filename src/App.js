@@ -12,6 +12,33 @@ function App() {
     .then(data => console.log(data))
   })
 
+  const URL = "/employees";
+  const sendForm = (e) => {
+    e.preventDefault();
+    let form = e.target;
+    let formBody = {
+      firstName: form.firstName.value,
+      lastName: form.lastName.value,
+      salary: form.salary.value,
+      hireDate: form.hireDate.value,
+      position: form.position.value,
+      manager: form.manager.value
+    }
+    const configObject = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(formBody),
+    };
+
+    fetch(URL, configObject)
+      .then((response) => response.json())
+      .then((employee) => console.log(employee))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -19,7 +46,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <EmployeeForm /> 
+        <EmployeeForm sendForm={sendForm}/> 
         <a
           className="App-link"
           href="https://reactjs.org"
