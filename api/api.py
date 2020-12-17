@@ -1,8 +1,5 @@
-from flask import Flask, request
+import os
+from flask import Flask, request, redirect
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-api = Api(app)
-
-@app.route('/employees', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def _employees():
-  return {employees = employees.get}

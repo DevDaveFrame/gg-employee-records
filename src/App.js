@@ -1,7 +1,17 @@
+import React, {useEffect} from "react"
 import logo from './logo.svg';
 import './App.css';
+import EmployeeForm from "./components/EmployeeForm"
+
+
 
 function App() {
+  useEffect(() => {
+    fetch("/employees")
+    .then(res => res.json())
+    .then(data => console.log(data))
+  })
+
   return (
     <div className="App">
       <header className="App-header">
@@ -9,6 +19,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <EmployeeForm /> 
         <a
           className="App-link"
           href="https://reactjs.org"
