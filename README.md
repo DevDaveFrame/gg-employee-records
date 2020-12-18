@@ -20,7 +20,14 @@ Here are some things I would have done with more time:
 
 ## Usage
 
-This app uses Python 3.7
+The API (located in the `/api` directory) uses Python 3.7 and requires the following dependencies:
+
+- Flask
+- SQLAlchemy
+- Flask SQLAlchemy
+- dateutils.parser
+- python-dotenv
+
 ### To create your database...
 
 1. In the terminal, navigate to the api directory.
@@ -28,8 +35,8 @@ This app uses Python 3.7
 3. Type the following:
 
 ```python
-from api import db
-db.create_all()
+>>> from api import db
+>>> db.create_all()
 ```
 
 ## Available Scripts
