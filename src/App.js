@@ -1,18 +1,21 @@
 import React, {useEffect, useState} from "react"
-import logo from './logo.svg';
 import './App.css';
+import EmployeeDisplay from "./components/EmployeeDisplay";
 import EmployeeForm from "./components/EmployeeForm"
 
 
 
 function App() {
   const [currentEmployee, setCurrentEmployee] = useState(undefined)
+  const [employees, setEmployees] = useState([])
 
   useEffect(() => {
     fetch("/employees")
     .then(res => res.json())
-    .then(data => console.log(data))
-  })
+    .then(data => setEmployees(data.employees))
+    .catch(error => console.log(error))
+    return () => {}
+  }, [])
 
   const URL = "/employees";
   const sendForm = (e, currentEmployee) => {
@@ -27,14 +30,14 @@ function App() {
       manager: form.manager.value
     }
     const configObject = {
-      method: currentEmployee.id ? "PATCH" : "POST",
+      method: currentEmployee ? "PATCH" : "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       body: JSON.stringify(formBody),
     };
-    const endpoint = currentEmployee.id ? `${URL}/${currentEmployee.id}` : URL
+    const endpoint = currentEmployee ? `${URL}/${currentEmployee.id}` : URL
     fetch(endpoint, configObject)
       .then((response) => response.json())
       .then((employee) => console.log(employee))
@@ -42,10 +45,15 @@ function App() {
     setCurrentEmployee(undefined)
   };
 
+  const handleResponse = (employee) => {
+
+  }
+
   return (
     <div className="App">
-
-      <EmployeeForm sendForm={sendForm} currentEmployee={currentEmployee}/> 
+      <h1>G&G Employee Database</h1>
+      <EmployeeDisplay employees={employees} setCurrentEmployee={setCurrentEmployee}/>
+      <EmployeeForm sendForm={sendForm} currentEmployee={currentEmployee} /> 
     </div>
   );
 }

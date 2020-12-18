@@ -67,9 +67,9 @@ def home():
     employees = Employee.query.all()
     return jsonify({'employees': list(map(lambda employee: employee.serialize(), employees))})
 
-@app.route("/employees/<int:employee_id>", methods=["POST", "DELETE"])
-def update():
-  if request.form:
+@app.route("/employees/<int:employee_id>", methods=["PATCH", "DELETE"])
+def update(employee_id):
+  if request.method == "PATCH":
     try:
         employee = Employee.query.filter_by(id=employee_id).first()
         employee.first_name = request.form.get("first_name")
@@ -82,12 +82,12 @@ def update():
     except Exception as e:
         print("Couldn't update employee record")
         print(e)
-    return {employee}
+    return jsonify(employee.serialize())
   if request.method == "DELETE":
     employee = Employee.query.filter_by(id=employee_id).first()
     db.session.delete(employee)
     db.session.commit()
-    return {employee}
+    return jsonify(employee.serialize())
 
 
 if __name__ == "__main__":
