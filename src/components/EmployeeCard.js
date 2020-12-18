@@ -19,7 +19,7 @@ export default function EmployeeCard(props) {
       </div>
       <div className="actions">
         <button onClick={()=> props.setCurrentEmployee(props.employee)}>Edit</button>
-        <button>Delete</button>
+        <button onClick={()=> props.deleteEmployee(props.employee)}>Delete</button>
       </div>
     </div>
   )

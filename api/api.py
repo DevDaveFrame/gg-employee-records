@@ -1,4 +1,5 @@
 import os
+import datetime
 import dateutil.parser
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -35,7 +36,7 @@ class Employee(db.Model):
       "first_name": self.first_name,
       "last_name": self.last_name,
       "salary": self.salary,
-      "hire_date": self.hire_date,
+      "hire_date": self.hire_date.strftime("%Y-%m-%d"),
       "position": self.position,
       "manager": self.manager
     }
@@ -43,11 +44,10 @@ class Employee(db.Model):
 
 
 @app.route('/employees', methods=["GET", "POST"])
-def home():
+def index_or_add():
     employees = None
     if request.method == "POST":
       form = request.get_json()
-      print(form)
       try:
           employee = Employee(
             first_name=form['firstName'],
@@ -67,17 +67,21 @@ def home():
     employees = Employee.query.all()
     return jsonify({'employees': list(map(lambda employee: employee.serialize(), employees))})
 
-@app.route("/employees/<int:employee_id>", methods=["PATCH", "DELETE"])
-def update(employee_id):
+@app.route("/employees/<int:employee_id>", methods=["GET", "PATCH", "DELETE"])
+def show_or_update(employee_id):
+  if request.method == "GET":
+    employee = Employee.query.filter_by(id=employee_id).first()
+    return jsonify(employee.serialize())
   if request.method == "PATCH":
+    form = request.get_json()
     try:
         employee = Employee.query.filter_by(id=employee_id).first()
-        employee.first_name = request.form.get("first_name")
-        employee.last_name = request.form.get("last_name")
-        employee.salary = request.form.get("salary")
-        employee.hire_date = request.form.get("hire_date")
-        employee.position = request.form.get("position")
-        employee.manager = request.form.get("manager")
+        employee.first_name=form['firstName']
+        employee.last_name=form['lastName']
+        employee.salary=form['salary']
+        employee.hire_date=dateutil.parser.parse(form['hireDate'])
+        employee.position=form['position']
+        employee.manager=form['manager']
         db.session.commit()
     except Exception as e:
         print("Couldn't update employee record")

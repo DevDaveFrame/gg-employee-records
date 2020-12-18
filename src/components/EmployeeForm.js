@@ -60,7 +60,6 @@ function EmployeeForm(props) {
           aria-invalid="true"
           required
         />
-        <br />
         <label htmlFor="price">Salary:</label>
         <input
           onChange={(e)=>setSalary(e.target.value)}
@@ -82,7 +81,6 @@ function EmployeeForm(props) {
           aria-invalid="true" 
           required
           />
-        <br />
         <label htmlFor="first-name">Position:</label>
         <input
           onChange={(e)=>setPosition(e.target.value)}
@@ -105,7 +103,6 @@ function EmployeeForm(props) {
           aria-invalid="true"
           required
         />
-        <br />
         <input type="submit" name="submit"/>
       </form>
     </div>
